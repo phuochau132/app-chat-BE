@@ -1,17 +1,14 @@
 package com.example.demo.Request;
 
 import com.example.demo.Entity.RoomEntity;
-import com.example.demo.Entity.UserEntity;
-import com.example.demo.Response.IErr;
+import com.example.demo.Response.IEmpty;
 import com.example.demo.Response.UserResponse;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 import java.sql.Date;
 
 @Data
-public class MessageRequest implements IErr {
+public class MessageRequest implements IEmpty {
     private String _id;
     private UserResponse user;
     private RoomEntity room;

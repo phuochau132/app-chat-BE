@@ -36,8 +36,8 @@ public class AuthService {
 
     @Transactional
     public AuthenticationResponse authenticationResponse(AuthenticationRequest authenticationRequest) {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-            UserEntity user = userRepository.findByEmail(authenticationRequest.getEmail()).orElseThrow();
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword()));
+            UserEntity user = userRepository.findByName(authenticationRequest.getUserName()).orElseThrow();
             List<RoleEntity> role = null;
             if (user != null) {
                 role = roleCusTomResponse.getRole(user);
@@ -48,8 +48,8 @@ public class AuthService {
             role.stream().forEach(item -> {
                 authority.add(new SimpleGrantedAuthority(item.getName()));
             });
-            var jwtToken = jwtService.generateToken(user.getEmail(), authority);
-            var jwtRefreshToken = jwtService.generateRefreshToken(user.getEmail(), authority);
+            var jwtToken = jwtService.generateToken(user.getName(), authority);
+            var jwtRefreshToken = jwtService.generateRefreshToken(user.getName(), authority);
             tokenRepository.save(new TokenEntity(jwtToken, jwtRefreshToken));
             return AuthenticationResponse.builder().accessToken(jwtToken).user(user).build();
     }

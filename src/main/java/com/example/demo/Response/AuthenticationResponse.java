@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class AuthenticationResponse implements IErr{
+public class AuthenticationResponse implements IEmpty {
     private UserEntity user;
     private String accessToken;
 }

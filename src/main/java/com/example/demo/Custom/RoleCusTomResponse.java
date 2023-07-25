@@ -21,10 +21,10 @@ public class RoleCusTomResponse {
     public List<RoleEntity> getRole(UserEntity user) {
         String sql = "SELECT r FROM RoleEntity r " +
                 "JOIN r.users u " +
-                "WHERE u.email = :email";
+                "WHERE u.name = :name";
 
         TypedQuery<RoleEntity> query = entityManager.createQuery(sql, RoleEntity.class);
-        query.setParameter("email", user.getEmail());
+        query.setParameter("name", user.getName());
 
         return query.getResultList();
     }

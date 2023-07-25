@@ -1,26 +1,26 @@
 package com.example.demo.Entity;
 
-import com.example.demo.Response.IErr;
+import com.example.demo.Response.IEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.*;
 @Data
 @Entity
 @NoArgsConstructor
 @Table(name = "user")
-public class UserEntity implements UserDetails, IErr {
+public class UserEntity implements UserDetails, IEmpty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id=null;
-    private String email=null;
-    private String full_name=null;
+    private String nickName=null;
+    private String birthDay=null;
     private String name=null;
+    private String story=null;
     @Column(columnDefinition = "VARCHAR(255) DEFAULT '/anonymous_avatar.png'")
     private String avatar;
     @JsonIgnore
@@ -33,19 +33,17 @@ public class UserEntity implements UserDetails, IErr {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id"))
     private Set<UserEntity> friends = new HashSet<>();
-    public UserEntity(Long id, String name, String email, String full_name, String password, Set<RoleEntity> roles) {
+    public UserEntity(Long id, String name, String birthDay, String story, String nickName, String password, Set<RoleEntity> roles) {
         this.id = id;
-        this.email = email;
+        this.nickName = nickName;
+        this.story = story;
         this.name=name;
-        this.full_name = full_name;
+        this.birthDay = birthDay;
         this.password = password;
         this.roles = roles;
     }
-
-
-
-    public UserEntity(String email, String password) {
-        this.email=email;
+    public UserEntity(String name, String password) {
+        this.name=name;
         this.password=password;
     }
 

@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ErrorResponse implements IErr{
-    private String err;
+public class EmptyResponse implements IEmpty {
+    private String message;
 }

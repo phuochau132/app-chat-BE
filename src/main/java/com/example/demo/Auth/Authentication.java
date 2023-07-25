@@ -20,7 +20,7 @@ public class Authentication {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Bean

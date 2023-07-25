@@ -7,7 +7,7 @@ import lombok.Data;
 import java.sql.Date;
 
 @Data
-public class MessageResponse implements IErr{
+public class MessageResponse implements IEmpty {
     private Long id;
     private UserEntity sender;
     private UserEntity receiver;

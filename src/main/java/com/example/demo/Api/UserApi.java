@@ -1,13 +1,16 @@
 package com.example.demo.Api;
 
 import com.example.demo.Entity.UserEntity;
-import com.example.demo.Request.AuthenticationRequest;
-import com.example.demo.Response.IErr;
+import com.example.demo.Response.EmptyResponse;
+import com.example.demo.Response.IEmpty;
 import com.example.demo.Service.UserService;
+import com.example.demo.UploadFile.UploadFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 
@@ -17,10 +20,12 @@ import java.util.Collection;
 public class UserApi {
     @Autowired
     UserService userService;
+    @Autowired
+    UploadFile uploadFile;
+    private final ObjectMapper objectMapper;
 
     @GetMapping()
     public ResponseEntity<Collection<UserEntity>> getAllUser() {
-        System.out.println(123);
         try {
             return ResponseEntity.ok(userService.getAllUser());
         } catch (Exception e) {
@@ -29,14 +34,21 @@ public class UserApi {
         }
     }
 
-    @PostMapping(value = "/register")
-    public ResponseEntity<String> register(@RequestBody AuthenticationRequest authenticationRequest) {
+    @PostMapping(value = "/profile")
+    public ResponseEntity<IEmpty> editProfile(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "user", required = false) String user) {
         try {
-            userService.saveUser(new UserEntity(authenticationRequest.getEmail(),authenticationRequest.getPassword()));
-            return ResponseEntity.ok("register success");
+            UserEntity user1 = objectMapper.readValue(user, UserEntity.class);
+            if (file != null) {
+                String newAvatar=uploadFile.uploadFile(file);
+                user1.setAvatar(newAvatar);
+                System.out.println(user1);
+            }
+            UserEntity userEntity= userService.changeProfile(user1);
+            return ResponseEntity.ok(userEntity);
         } catch (Exception e) {
             System.out.println(e);
-            return ResponseEntity.status(403).body("register dont success");
+            return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
         }
     }
+
 }

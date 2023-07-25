@@ -1,6 +1,5 @@
 package com.example.demo.Response;
 
-import com.example.demo.Entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class UserResponse implements IErr{
+public class UserResponse implements IEmpty {
     private String _id;
     private String name;
 }

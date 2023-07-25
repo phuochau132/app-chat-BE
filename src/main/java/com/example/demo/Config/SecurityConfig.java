@@ -29,9 +29,9 @@ public class SecurityConfig {
         http
                 .authorizeRequests((requests) -> requests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/**").permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/gs-guide-websocket/**")).permitAll() // Exclude WebSocket handshake from authentication
-                        .requestMatchers("/demo/**").hasRole("USER")
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/gs-guide-websocket/**")).permitAll()
+//                        .requestMatchers("/api/users").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 .logout((logout) -> logout.permitAll())

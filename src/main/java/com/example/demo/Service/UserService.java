@@ -6,11 +6,13 @@ import com.example.demo.IService.IUser;
 import com.example.demo.Repositories.RoleRepository;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Optional;
 
 
 @Service
@@ -36,7 +38,7 @@ public class UserService implements IUser {
     @Transactional
     @Override
     public void addToUser(String username, String rolename) {
-        UserEntity userEntity=userRepository.findByEmail(username).get();
+        UserEntity userEntity=userRepository.findByName(username).get();
         RoleEntity roleEntity=roleRepository.findByName((rolename));
         userEntity.getRoles().add(roleEntity);
     }
@@ -44,5 +46,19 @@ public class UserService implements IUser {
     @Override
     public Collection<UserEntity> getAllUser() {
         return userRepository.getAllBy();
+    }
+
+    @Override
+    public UserEntity changeProfile(UserEntity userEntity) {
+        Optional<UserEntity> optionalUser= userRepository.findById(userEntity.getId());
+        UserEntity user = optionalUser.get();
+        user.setAvatar(userEntity.getAvatar());
+        user.setName(userEntity.getName());
+        user.setNickName(userEntity.getNickName());
+        user.setStory(userEntity.getStory());
+        user.setBirthDay(userEntity.getBirthDay());
+        userRepository.save(user);
+        return user;
+
     }
 }

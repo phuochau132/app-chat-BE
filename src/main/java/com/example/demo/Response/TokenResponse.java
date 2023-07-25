@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TokenResponse implements IErr{
+public class TokenResponse implements IEmpty {
     private String accessToken;
     private String refreshToken;
 

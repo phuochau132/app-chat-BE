@@ -11,4 +11,5 @@ public interface IUser {
     RoleEntity saveRole(RoleEntity roleEntity);
     void addToUser(String username,String rolename);
     Collection<UserEntity> getAllUser();
+    UserEntity changeProfile(UserEntity userEntity);
 }
