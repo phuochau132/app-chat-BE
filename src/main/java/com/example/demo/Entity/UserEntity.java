@@ -20,6 +20,8 @@ public class UserEntity implements UserDetails, IEmpty {
     private String nickName=null;
     private String birthDay=null;
     private String name=null;
+    private String fullName=null;
+    private String expoPushToken=null;
     private String story=null;
     @Column(columnDefinition = "VARCHAR(255) DEFAULT '/anonymous_avatar.png'")
     private String avatar;
@@ -28,11 +30,6 @@ public class UserEntity implements UserDetails, IEmpty {
     @ManyToMany
     @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles=new HashSet<RoleEntity>();
-    @ManyToMany
-    @JoinTable(name = "friendships",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    private Set<UserEntity> friends = new HashSet<>();
     public UserEntity(Long id, String name, String birthDay, String story, String nickName, String password, Set<RoleEntity> roles) {
         this.id = id;
         this.nickName = nickName;
@@ -47,7 +44,7 @@ public class UserEntity implements UserDetails, IEmpty {
         this.password=password;
     }
 
-
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection=new ArrayList<>();
         roles.stream().forEach(item->collection.add(new SimpleGrantedAuthority(item.getName())));
