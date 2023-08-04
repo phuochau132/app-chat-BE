@@ -1,10 +1,8 @@
 package com.example.demo.Service;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.Custom.FriendShipCusTomResponse;
-import com.example.demo.Entity.FriendshipEntity;
-import com.example.demo.Entity.MessageEntity;
-import com.example.demo.Entity.RoleEntity;
-import com.example.demo.Entity.UserEntity;
+import com.example.demo.Entity.*;
 import com.example.demo.IService.IUser;
 import com.example.demo.Repositories.FriendShipRepository;
 import com.example.demo.Repositories.MessageRepository;
@@ -33,6 +31,8 @@ public class UserService implements IUser {
     RoleRepository roleRepository;
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    JwtService jwtService;
 
     @Override
     public UserEntity saveUser(UserEntity user) {
@@ -102,6 +102,19 @@ public class UserService implements IUser {
         return f.get();
 
     }
+    @Override
+    public Optional<UserEntity> getInfoUser(String token) {
+        System.out.println(1235);
+        System.out.println(token);
+        DecodedJWT decodedJWT = jwtService.verifyToken(token);
+        String username = decodedJWT.getSubject();
+
+        System.out.println(decodedJWT);
+        System.out.println(username);
+        return userRepository.findByName(username);
+    }
+
+
 
 
 }

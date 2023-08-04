@@ -10,7 +10,6 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 public class UserRequest  implements IEmpty {
-    private final Long id=null;
     private final String nickName=null;
     private final String birthDay=null;
     private final String name=null;

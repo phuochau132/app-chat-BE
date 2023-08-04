@@ -1,5 +1,7 @@
 package com.example.demo.Api;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.Entity.FriendshipEntity;
 import com.example.demo.Entity.MessageEntity;
 import com.example.demo.Entity.RoomEntity;
@@ -32,7 +34,6 @@ public class UserApi {
     @Autowired
     RoomRepository roomRepository;
     private final ObjectMapper objectMapper;
-
     @GetMapping()
     public ResponseEntity<Collection<UserEntity>> getAllUser() {
         try {
@@ -48,7 +49,7 @@ public class UserApi {
         try {
             UserEntity user1 = objectMapper.readValue(user, UserEntity.class);
             if (file != null) {
-                String newAvatar = uploadFile.uploadFile(file);
+                String newAvatar = uploadFile.uploadFile(file,"user");
                 user1.setAvatar(newAvatar);
                 System.out.println(user1);
             }
@@ -110,6 +111,25 @@ public class UserApi {
                 f1=userService.delRequestAddFriend(requestBody.get("id"));
             }
             return ResponseEntity.ok(f1);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
+        }
+    }
+    @PostMapping()
+    public ResponseEntity<IEmpty> getInfoUserFToken(@RequestBody Map<String, String> requestBody) {
+        System.out.println(requestBody.get("token"));
+        try {
+            return ResponseEntity.ok(userService.getInfoUser(requestBody.get("token")).get());
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
+        }
+    }
+    @PostMapping(value = "/posts")
+    public ResponseEntity<IEmpty> addPost(@RequestBody Map<String, String> requestBody) {
+        try {
+            return ResponseEntity.ok(userService.getInfoUser(requestBody.get("token")).get());
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());

@@ -1,9 +1,6 @@
 package com.example.demo.IService;
 
-import com.example.demo.Entity.FriendshipEntity;
-import com.example.demo.Entity.MessageEntity;
-import com.example.demo.Entity.RoleEntity;
-import com.example.demo.Entity.UserEntity;
+import com.example.demo.Entity.*;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -20,4 +17,6 @@ public interface IUser {
     public Collection<FriendshipEntity> findAllFriend(long idUSer) ;
     public FriendshipEntity acceptRequestAddFriend(long idFS);
     public FriendshipEntity delRequestAddFriend(long idFS);
+    public Optional<UserEntity> getInfoUser(String token);
+
 }

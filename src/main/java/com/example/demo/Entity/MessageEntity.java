@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.security.core.userdetails.User;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "messages")
@@ -26,6 +27,12 @@ public class MessageEntity {
 
     private String content;
     private int type;
-    private Date sentAt;
+    @Column(name = "sentAt")
+    private Date createAt;
+
+    @PrePersist
+    private void setCreateAt() {
+        createAt = new Date(Calendar.getInstance().getTimeInMillis());
+    }
 
 }

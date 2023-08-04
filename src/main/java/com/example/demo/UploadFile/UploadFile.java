@@ -12,14 +12,14 @@ import java.io.IOException;
 public class UploadFile {
     @Autowired
     private  ResourceLoader resourceLoader;
-    public  String uploadFile(MultipartFile file) {
+    public  String uploadFile(MultipartFile file,String path) {
         try {
-            String uploadPath = resourceLoader.getResource("classpath:/static/user").getFile().getAbsolutePath();
+            String uploadPath = resourceLoader.getResource("classpath:/static/"+path).getFile().getAbsolutePath();
             String fileName = file.getOriginalFilename();
             System.out.println(File.separator + fileName);
             File destinationFile = new File(uploadPath + File.separator + fileName);
             file.transferTo(destinationFile);
-            return "\\user"+File.separator + fileName;
+            return "\\"+path+File.separator + fileName;
         } catch (IOException e) {
             System.out.println(e);
             return "Lỗi khi lưu tệp tải lên: " + e.getMessage();
