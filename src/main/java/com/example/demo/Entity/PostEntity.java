@@ -1,13 +1,8 @@
 package com.example.demo.Entity;
 
 import com.example.demo.Response.IEmpty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import java.util.*;
 
 @Data
@@ -21,12 +16,13 @@ public class PostEntity implements IEmpty {
     @JoinColumn(name = "user_id")
     private UserEntity user;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private Collection<ImgPostEntity> imgPosts = new ArrayList<>();
     private String text;
     private int status;
     private Date createAt;
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "post_like", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserEntity> likedUsers = new HashSet<UserEntity>();
     @PrePersist
     public void prePersist() {
         if (createAt == null) {

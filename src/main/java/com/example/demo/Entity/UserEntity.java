@@ -2,6 +2,7 @@ package com.example.demo.Entity;
 
 import com.example.demo.Response.IEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +28,9 @@ public class UserEntity implements UserDetails, IEmpty {
     private String avatar;
     @JsonIgnore
     private String password=null;
+    @ManyToMany(mappedBy = "likedUsers")
+    @JsonIgnoreProperties("likedUsers")
+    private Set<PostEntity> posts=new HashSet<>();
     @ManyToMany
     @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles=new HashSet<RoleEntity>();
