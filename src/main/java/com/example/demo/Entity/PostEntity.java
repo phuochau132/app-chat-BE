@@ -1,6 +1,8 @@
 package com.example.demo.Entity;
 
 import com.example.demo.Response.IEmpty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.*;
@@ -17,6 +19,8 @@ public class PostEntity implements IEmpty {
     private UserEntity user;
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<ImgPostEntity> imgPosts = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<CommentEntity> comments = new ArrayList<>();
     private String text;
     private int status;
     private Date createAt;

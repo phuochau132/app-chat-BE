@@ -1,10 +1,12 @@
 package com.example.demo.Service;
 
 import com.example.demo.Custom.PostCusTomResponse;
+import com.example.demo.Entity.CommentEntity;
 import com.example.demo.Entity.ImgPostEntity;
 import com.example.demo.Entity.PostEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.IService.IPost;
+import com.example.demo.Repositories.CommentRepository;
 import com.example.demo.Repositories.ImagePostRepository;
 import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
@@ -14,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -30,6 +31,8 @@ public class PostService implements IPost {
     UploadFile uploadFile;
     @Autowired
     PostCusTomResponse postCusTomResponse;
+    @Autowired
+    CommentRepository commentRepository;
 
     @Override
     public PostEntity addPost(PostRequest postRequest) {
@@ -61,15 +64,21 @@ public class PostService implements IPost {
         post.setLikedUsers(postCusTomResponse.getUserLiked(post));
         return post;
     }
+
     @Transactional
     @Override
     public PostEntity dislikePost(long idPost, long idUser) {
         PostEntity post = postRepository.findById(idPost).get();
-        UserEntity user=userRepository.findById(idUser).get();
+        UserEntity user = userRepository.findById(idUser).get();
         post.getLikedUsers().remove(user);
         postRepository.save(post);
         post.setLikedUsers(postCusTomResponse.getUserLiked(post));
         return post;
+    }
+
+    @Override
+    public Collection<PostEntity> getPosts(long idPost) {
+        return postCusTomResponse.getPosts(idPost);
     }
 
 

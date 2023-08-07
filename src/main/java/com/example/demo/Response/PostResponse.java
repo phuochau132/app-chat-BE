@@ -1,5 +1,6 @@
 package com.example.demo.Response;
 
+import com.example.demo.Entity.CommentEntity;
 import com.example.demo.Entity.ImgPostEntity;
 import com.example.demo.Entity.UserEntity;
 import jakarta.persistence.*;

@@ -1,6 +1,7 @@
 package com.example.demo.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,8 +17,8 @@ public class ImgPostEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "id_post", referencedColumnName = "id")
-    @JsonIgnoreProperties("imgPosts")
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JsonIgnore
     private PostEntity post;
     private String urlImg;
 

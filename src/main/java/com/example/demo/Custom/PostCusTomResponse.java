@@ -1,7 +1,6 @@
 package com.example.demo.Custom;
 
 import com.example.demo.Entity.PostEntity;
-import com.example.demo.Entity.RoleEntity;
 import com.example.demo.Entity.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -27,6 +26,15 @@ public class PostCusTomResponse {
 
         List<UserEntity> users = query.getResultList();
         return new HashSet<>(users);
+    }
+    public Set<PostEntity> getPosts(long idPost) {
+        String sql = "SELECT p FROM PostEntity p " +
+                "WHERE p.id > :id ORDER BY p.id ASC";
+        TypedQuery<PostEntity> query = entityManager.createQuery(sql, PostEntity.class);
+        query.setParameter("id", idPost);
+        query.setMaxResults(2);
+        List<PostEntity> posts = query.getResultList();
+        return new HashSet<>(posts);
     }
 
 }

@@ -126,14 +126,6 @@ public class UserApi {
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
         }
     }
-    @PostMapping(value = "/posts")
-    public ResponseEntity<IEmpty> addPost(@RequestBody Map<String, String> requestBody) {
-        try {
-            return ResponseEntity.ok(userService.getInfoUser(requestBody.get("token")).get());
-        } catch (Exception e) {
-            System.out.println(e);
-            return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
-        }
-    }
+
 
 }
