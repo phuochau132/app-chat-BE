@@ -6,7 +6,6 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Repository
@@ -16,6 +15,12 @@ public class FriendShipCusTomResponse  {
 
     public Collection<FriendshipEntity> getUserSendRequest(long id) {
         String jpql = "SELECT f as id FROM FriendshipEntity f WHERE ( f.friend.id = :userId) AND f.status = 0";
+        TypedQuery<FriendshipEntity> query = entityManager.createQuery(jpql, FriendshipEntity.class);
+        query.setParameter("userId", id);
+        return query.getResultList();
+    }
+    public Collection<FriendshipEntity> getAllFriend(long id) {
+        String jpql = "SELECT f as id FROM FriendshipEntity f WHERE ( f.friend.id = :userId) or  ( f.user.id = :userId) AND f.status = 1";
         TypedQuery<FriendshipEntity> query = entityManager.createQuery(jpql, FriendshipEntity.class);
         query.setParameter("userId", id);
         return query.getResultList();

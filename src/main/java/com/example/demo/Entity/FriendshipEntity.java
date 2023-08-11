@@ -25,11 +25,12 @@ public class FriendshipEntity implements IEmpty {
     //0 chờ
     //1 bạn bè
     private Date createAt;
-    private int status=0;
+    private int status;
     @PrePersist
     public void prePersist() {
         if (createAt == null) {
             createAt = new Date();
         }
     }
+
 }

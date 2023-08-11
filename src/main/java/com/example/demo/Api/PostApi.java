@@ -5,6 +5,7 @@ import com.example.demo.Repositories.ImagePostRepository;
 import com.example.demo.Request.PostRequest;
 import com.example.demo.Response.EmptyResponse;
 import com.example.demo.Response.IEmpty;
+import com.example.demo.Response.PostResponse;
 import com.example.demo.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class PostApi {
         System.out.println(idPost);
         System.out.println(idUser);
         try {
-            PostEntity post = postService.likePost(idPost, idUser);
+            PostResponse post = postService.likePost(idPost, idUser);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
             System.out.println(e);
@@ -59,7 +60,7 @@ public class PostApi {
         long idPost = requestBody.get("idPost");
         long idUser = requestBody.get("idUser");
         try {
-            PostEntity post = postService.dislikePost(idPost, idUser);
+            PostResponse post = postService.dislikePost(idPost, idUser);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
             System.out.println(e);
@@ -68,10 +69,10 @@ public class PostApi {
     }
 
     @GetMapping(value = "/{idPost}")
-    public ResponseEntity<Collection<PostEntity>> getPosts(@PathVariable long idPost) {
+    public ResponseEntity<Collection<PostResponse>> getPosts(@PathVariable long idPost) {
         System.out.println(12391238);
         try {
-            Collection<PostEntity> posts = postService.getPosts(idPost);
+            Collection<PostResponse> posts = postService.getPosts(idPost);
             return ResponseEntity.ok(posts);
         } catch (Exception e) {
             System.out.println(e);

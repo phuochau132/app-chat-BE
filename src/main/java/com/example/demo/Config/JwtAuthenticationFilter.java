@@ -1,11 +1,6 @@
 package com.example.demo.Config;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.demo.Entity.TokenEntity;
-import com.example.demo.Repositories.TokenRepository;
 import com.example.demo.Service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -31,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String auth = request.getHeader("authorization");
-        System.out.println(123);
+        System.out.println(auth);
         if (auth != null && auth.startsWith("Bearer")) {
             try {
                 String token = auth.split(" ")[1];
@@ -44,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 filterChain.doFilter(request, response);
             } catch (Exception e) {
-                System.out.println(98123);
+                System.out.println("refreshToken hậu nè");
                 response.setStatus(401);
             }
         } else {

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collection;
 import java.util.Optional;
 
@@ -21,10 +20,6 @@ import java.util.Optional;
 public class UserService implements IUser {
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    FriendShipRepository friendShipRepository;
-    @Autowired
-    FriendShipCusTomResponse friendShipCusTomResponse;
     @Autowired
     MessageRepository messageRepository;
     @Autowired
@@ -60,7 +55,7 @@ public class UserService implements IUser {
 
     @Override
     public UserEntity changeProfile(UserEntity userEntity) {
-        Optional<UserEntity> optionalUser= userRepository.findById(userEntity.getId());
+        Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
         UserEntity user = optionalUser.get();
         user.setAvatar(userEntity.getAvatar());
         user.setFullName(userEntity.getFullName());
@@ -70,10 +65,7 @@ public class UserService implements IUser {
         userRepository.save(user);
         return user;
     }
-    @Override
-    public FriendshipEntity saveFriendShip(FriendshipEntity friendshipEntity) {
-        return friendShipRepository.save(friendshipEntity);
-    }
+
     @Override
     public MessageEntity saveMessage(MessageEntity messageEntity) {
         return messageRepository.save(messageEntity);
@@ -81,26 +73,6 @@ public class UserService implements IUser {
     @Override
     public Optional<UserEntity> findById(long id) {
         return userRepository.findById(id);
-    }
-
-    @Override
-    public Collection<FriendshipEntity> findAllFriend(long idUSer) {
-        return friendShipCusTomResponse.getUserSendRequest(idUSer);
-    }
-    @Override
-    public FriendshipEntity acceptRequestAddFriend(long idFs) {
-        Optional<FriendshipEntity> f= friendShipRepository.findById(idFs);
-        FriendshipEntity friend= f.get();
-        friend.setStatus(1);
-        return friendShipRepository.save(friend);
-    }
-    @Transactional
-    @Override
-    public FriendshipEntity delRequestAddFriend(long idFs) {
-        Optional<FriendshipEntity> f= friendShipRepository.findById(idFs);
-        friendShipRepository.delete(f.get());
-        return f.get();
-
     }
     @Override
     public Optional<UserEntity> getInfoUser(String token) {
@@ -113,8 +85,4 @@ public class UserService implements IUser {
         System.out.println(username);
         return userRepository.findByName(username);
     }
-
-
-
-
 }

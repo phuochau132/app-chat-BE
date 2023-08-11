@@ -1,5 +1,4 @@
 package com.example.demo.Service;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,7 +15,7 @@ public class JwtService {
     private static final String secret__key="hau123";
     public String generateToken(String name, Collection<SimpleGrantedAuthority> collection){
         Algorithm algorithm=Algorithm.HMAC256(secret__key.getBytes());
-        return JWT.create().withSubject(name).withExpiresAt(new Date(System.currentTimeMillis()+60*1000*60)).withClaim("roles",collection.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);
+        return JWT.create().withSubject(name).withExpiresAt(new Date(System.currentTimeMillis()+60*1000)).withClaim("roles",collection.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);
     }
     public String generateRefreshToken(String name, Collection<SimpleGrantedAuthority> collection){
         Algorithm algorithm=Algorithm.HMAC256(secret__key.getBytes());

@@ -38,8 +38,11 @@ public class AuthApi {
     @PostMapping(value = "/refreshToken")
     public ResponseEntity<IEmpty> refreshToken(@RequestHeader HttpHeaders headers) {
         String auth = headers.getFirst("Authorization");
+        System.out.println(98787);
+        System.out.println(auth);
         if (auth != null) {
             TokenResponse tokenResponse = authService.refreshToken(auth);
+            System.out.println(tokenResponse);
             if (tokenResponse != null) {
                 return ResponseEntity.ok(tokenResponse);
             } else {

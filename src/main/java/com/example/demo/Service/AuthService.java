@@ -42,7 +42,6 @@ public class AuthService {
             if (user != null) {
                 role = roleCusTomResponse.getRole(user);
             }
-            System.out.println(role);
             Collection<SimpleGrantedAuthority> authority = new ArrayList<>();
             Set<RoleEntity> set = new HashSet<>();
             role.stream().forEach(item -> {

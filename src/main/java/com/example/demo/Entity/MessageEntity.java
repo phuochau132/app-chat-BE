@@ -1,38 +1,41 @@
 package com.example.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.springframework.security.core.userdetails.User;
+import lombok.Data;
 
-import java.sql.Date;
-import java.util.Calendar;
+import java.util.Date;
+
 
 @Entity
-@Table(name = "messages")
+@Data
+@Table(name = "message")
 public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long _id;
     @ManyToOne
     @JoinColumn(name = "sender_id")
+    @JsonIgnoreProperties({"posts", "roles",})
     private UserEntity sender;
-
     @ManyToOne
+    @JsonIgnoreProperties({"posts", "roles",})
     @JoinColumn(name = "receiver_id")
     private UserEntity receiver;
-
     @ManyToOne
-    @JoinColumn(name = "room_id")
+    @JoinColumn(name = "room_id", referencedColumnName = "id")
+    @JsonIgnore
     private RoomEntity room;
-
-    private String content;
+    private String text;
     private int type;
-    @Column(name = "sentAt")
     private Date createAt;
 
     @PrePersist
-    private void setCreateAt() {
-        createAt = new Date(Calendar.getInstance().getTimeInMillis());
+    public void prePersist() {
+        if (createAt == null) {
+            createAt = new Date();
+        }
     }
 
 }

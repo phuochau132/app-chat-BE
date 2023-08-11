@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class FriendRequest {
-    private UserEntity userSend;
-    private UserEntity userReceive;
+    private long senderId;
+    private long receiverId;
 }
