@@ -12,6 +12,8 @@ import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Request.PostRequest;
 import com.example.demo.Response.PostResponse;
 import com.example.demo.UploadFile.UploadFile;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -36,6 +37,8 @@ public class PostService implements IPost {
     PostCusTomResponse postCusTomResponse;
     @Autowired
     CommentRepository commentRepository;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public PostEntity addPost(PostRequest postRequest) {
@@ -59,24 +62,25 @@ public class PostService implements IPost {
 
     @Transactional
     @Override
-    public PostResponse likePost(long idPost, long idUser) {
+    public UserEntity likePost(long idPost, long idUser) {
         PostEntity post = postRepository.findById(idPost).get();
         UserEntity user = userRepository.findById(idUser).get();
         post.getLikedUsers().add(user);
         postRepository.save(post);
-        return PostResponse.builder().id(post.getId()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(postCusTomResponse.getUserLiked(post)).build();
+        return user;
     }
 
     @Transactional
     @Override
-    public PostResponse dislikePost(long idPost, long idUser) {
+    public UserEntity dislikePost(long idPost, long idUser) {
         PostEntity post = postRepository.findById(idPost).get();
         UserEntity user = userRepository.findById(idUser).get();
-        post.getLikedUsers().remove(user);
-        postRepository.save(post);
-        Set<UserEntity> users = postCusTomResponse.getUserLiked(post);
-        users.remove(user);
-        return PostResponse.builder().id(post.getId()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(users).build();
+        if (postCusTomResponse.delUserLiked(user, idPost) > 0) {
+            return user;
+        }
+        return null;
+
+
     }
 
     @Override

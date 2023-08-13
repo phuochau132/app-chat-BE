@@ -1,15 +1,17 @@
 package com.example.demo.Response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @Builder
-@NoArgsConstructor
 public class UserResponse implements IEmpty {
-    private String _id;
+    private Long id;
+    private String nickName;
+    private String birthDay;
     private String name;
+    private String fullName;
+    private String expoPushToken;
+    private String story;
+    private String avatar;
 }

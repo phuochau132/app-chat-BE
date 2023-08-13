@@ -18,7 +18,7 @@ public class RoomService implements IRoom {
     UserRepository userRepository;
     @Transactional
     @Override
-    public RoomEntity addMessage(MessageRequest message) {
+    public MessageEntity addMessage(MessageRequest message) {
         RoomEntity room = roomRepository.findById(message.getRoomId()).orElseThrow();
         MessageEntity newMessage = new MessageEntity();
         newMessage.setReceiver(userRepository.findById(message.getReceiverId()).orElseThrow());
@@ -26,7 +26,7 @@ public class RoomService implements IRoom {
         newMessage.setRoom(room);
         newMessage.setText(message.getText());
         room.getMessage().add(newMessage);
-        return roomRepository.save(room);
+        return newMessage;
     }
     @Override
     public RoomEntity getRoom(long idRoom) {

@@ -1,5 +1,6 @@
 package com.example.demo.Api;
 
+import com.example.demo.Entity.MessageEntity;
 import com.example.demo.Entity.RoomEntity;
 import com.example.demo.Request.MessageRequest;
 import com.example.demo.Response.EmptyResponse;
@@ -24,7 +25,7 @@ public class MessageApi {
     public ResponseEntity<IEmpty> addMessageToRoom(@RequestBody MessageRequest messageRequest) {
         System.out.println(messageRequest);
         try {
-            RoomEntity room= roomService.addMessage(messageRequest);
+            MessageEntity room= roomService.addMessage(messageRequest);
             return ResponseEntity.ok(room);
         } catch (Exception e) {
             System.out.println(e);

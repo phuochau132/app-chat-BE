@@ -24,7 +24,6 @@ public class AuthApi {
 
     @PostMapping(value = "/login")
     public ResponseEntity<IEmpty> login(@RequestBody AuthenticationRequest authenticationRequest) {
-        System.out.println(authenticationRequest);
         try {
             AuthenticationResponse authenticationResponse = authService.authenticationResponse(authenticationRequest);
             return ResponseEntity.ok(authenticationResponse);
@@ -38,17 +37,15 @@ public class AuthApi {
     @PostMapping(value = "/refreshToken")
     public ResponseEntity<IEmpty> refreshToken(@RequestHeader HttpHeaders headers) {
         String auth = headers.getFirst("Authorization");
-        System.out.println(98787);
-        System.out.println(auth);
         if (auth != null) {
             TokenResponse tokenResponse = authService.refreshToken(auth);
-            System.out.println(tokenResponse);
             if (tokenResponse != null) {
                 return ResponseEntity.ok(tokenResponse);
             } else {
                 return ResponseEntity.status(403).body(EmptyResponse.builder().message("refreshToken dont exits or have been refreshed").build());
             }
         }
+
         return ResponseEntity.status(403).body(EmptyResponse.builder().message("dont have accessToken").build());
     }
 

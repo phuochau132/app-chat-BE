@@ -57,17 +57,15 @@ public class AuthService {
         String token = auth.split(" ")[1];
         TokenEntity tokenEntity = tokenRepository.findByAccessToken(token);
         if (tokenEntity != null) {
-            System.out.println(tokenEntity.getRefreshToken());
             DecodedJWT decodedJWT = jwtService.verifyToken(tokenEntity.getRefreshToken());
             String email = decodedJWT.getSubject();
-            System.out.println(email);
             String[] role = decodedJWT.getClaim("roles").asArray(String.class);
             Collection<SimpleGrantedAuthority> collection = new ArrayList<>();
             Arrays.stream(role).forEach(item -> collection.add(new SimpleGrantedAuthority(item)));
-            System.out.println(1983);
-            System.out.println(tokenRepository.deleteByAccessToken(token));
             String newAccessToken = jwtService.generateToken(email, collection);
             String newRefreshToken = jwtService.generateRefreshToken(email, collection);
+            tokenRepository.delete(tokenEntity);
+            tokenRepository.save(TokenEntity.builder().refreshToken(newRefreshToken).accessToken(newAccessToken).build());
             return TokenResponse.builder().accessToken(newAccessToken).refreshToken(newRefreshToken).build();
         } else {
             return null;

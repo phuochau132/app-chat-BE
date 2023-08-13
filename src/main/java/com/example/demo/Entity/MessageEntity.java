@@ -1,5 +1,6 @@
 package com.example.demo.Entity;
 
+import com.example.demo.Response.IEmpty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -11,7 +12,7 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "message")
-public class MessageEntity {
+public class MessageEntity implements IEmpty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long _id;

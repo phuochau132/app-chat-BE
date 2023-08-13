@@ -4,6 +4,7 @@ import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repositories.RoomRepository;
 import com.example.demo.Response.EmptyResponse;
 import com.example.demo.Response.IEmpty;
+import com.example.demo.Response.UserResponse;
 import com.example.demo.Service.UserService;
 import com.example.demo.UploadFile.UploadFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,13 +43,13 @@ public class UserApi {
     public ResponseEntity<IEmpty> editProfile(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "user", required = false) String user) {
         try {
             UserEntity user1 = objectMapper.readValue(user, UserEntity.class);
+            System.out.println(user1);
             if (file != null) {
                 String newAvatar = uploadFile.uploadFile(file, "user");
                 user1.setAvatar(newAvatar);
-                System.out.println(user1);
             }
-            UserEntity userEntity = userService.changeProfile(user1);
-            return ResponseEntity.ok(userEntity);
+            UserResponse userR = userService.changeProfile(user1);
+            return ResponseEntity.ok(userR);
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());

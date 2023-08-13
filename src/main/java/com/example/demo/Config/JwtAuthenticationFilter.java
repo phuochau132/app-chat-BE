@@ -28,22 +28,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String auth = request.getHeader("authorization");
         System.out.println(auth);
         if (auth != null && auth.startsWith("Bearer")) {
-            try {
-                String token = auth.split(" ")[1];
-                DecodedJWT decodedJWT = jwtService.verifyToken(token);
-                String username = decodedJWT.getSubject();
-                String[] role = decodedJWT.getClaim("roles").asArray(String.class);
-                Collection<SimpleGrantedAuthority> collection = new ArrayList<>();
-                Arrays.stream(role).forEach(item -> collection.add(new SimpleGrantedAuthority(item)));
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, collection);
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            if(auth.startsWith("BearerF") ){
                 filterChain.doFilter(request, response);
-            } catch (Exception e) {
-                System.out.println("refreshToken hậu nè");
-                response.setStatus(401);
+            }else{
+                try {
+                    String token = auth.split(" ")[1];
+                    DecodedJWT decodedJWT = jwtService.verifyToken(token);
+                    String username = decodedJWT.getSubject();
+                    String[] role = decodedJWT.getClaim("roles").asArray(String.class);
+                    Collection<SimpleGrantedAuthority> collection = new ArrayList<>();
+                    Arrays.stream(role).forEach(item -> collection.add(new SimpleGrantedAuthority(item)));
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, collection);
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    filterChain.doFilter(request, response);
+                } catch (Exception e) {
+                    System.out.println("refreshToken hậu nè");
+                    response.setStatus(401);
+                }
             }
+
         } else {
-            System.out.println(1235);
             filterChain.doFilter(request, response);
         }
     }

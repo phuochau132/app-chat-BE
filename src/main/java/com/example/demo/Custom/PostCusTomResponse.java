@@ -1,17 +1,19 @@
 package com.example.demo.Custom;
 
-import com.example.demo.Entity.CommentEntity;
-import com.example.demo.Entity.ImgPostEntity;
 import com.example.demo.Entity.PostEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Response.PostResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Repository
 public class PostCusTomResponse {
@@ -35,30 +37,44 @@ public class PostCusTomResponse {
         String sql1 = "SELECT MAX(p.id) FROM PostEntity p";
         TypedQuery<Long> query1 = entityManager.createQuery(sql1, Long.class);
         Long maxId = query1.getSingleResult();
+        if (maxId != null) {
+            String sql2 = "SELECT MIN(p.id) FROM PostEntity p";
+            TypedQuery<Long> query2 = entityManager.createQuery(sql2, Long.class);
+            Long minId = query2.getSingleResult();
 
-        String sql2 = "SELECT MIN(p.id) FROM PostEntity p";
-        TypedQuery<Long> query2 = entityManager.createQuery(sql2, Long.class);
-        Long minId = query2.getSingleResult();
+            String sql = "SELECT p FROM PostEntity p " +
+                    "WHERE p.id > :minId AND p.id <= :maxId ORDER BY p.id ASC";
 
-        String sql = "SELECT p FROM PostEntity p " +
-                "WHERE p.id > :minId AND p.id <= :maxId ORDER BY p.id ASC";
+            TypedQuery<PostEntity> query = entityManager.createQuery(sql, PostEntity.class);
 
-        TypedQuery<PostEntity> query = entityManager.createQuery(sql, PostEntity.class);
-
-        if (idPost > maxId) {
-            query.setParameter("minId", maxId - 2);
-            query.setParameter("maxId", maxId);
-        } else if (idPost >= minId) {
-            query.setParameter("minId", idPost - 3);
-            query.setParameter("maxId", idPost - 1);
+            if (idPost > maxId) {
+                query.setParameter("minId", maxId - 2);
+                query.setParameter("maxId", maxId);
+            } else if (idPost >= minId) {
+                query.setParameter("minId", idPost - 3);
+                query.setParameter("maxId", idPost - 1);
+            }
+            query.setMaxResults(2);
+            List<PostEntity> posts = query.getResultList();
+            List<PostResponse> postsRp = new ArrayList<>();
+            for (PostEntity post : posts) {
+                postsRp.add(PostResponse.builder().id(post.getId()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(getUserLiked(post)).build());
+            }
+            return new HashSet<>(postsRp);
         }
-        query.setMaxResults(2);
-        List<PostEntity> posts = query.getResultList();
-        List<PostResponse> postsRp = new ArrayList<>();
-        for (PostEntity post : posts) {
-            postsRp.add(PostResponse.builder().id(post.getId()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(getUserLiked(post)).build());
-        }
-        return new HashSet<>(postsRp);
+        return new HashSet<>();
+
+
+    }
+
+    public int delUserLiked(UserEntity user, long postId) {
+        String sql = "DELETE FROM post_like WHERE user_id = :userId AND post_id = :postId";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("userId", user.getId());
+        query.setParameter("postId", postId);
+        int deletedCount = query.executeUpdate();
+        System.out.println(deletedCount);
+        return deletedCount;
     }
 }
 

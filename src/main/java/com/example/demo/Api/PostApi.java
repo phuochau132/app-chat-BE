@@ -1,6 +1,7 @@
 package com.example.demo.Api;
 
 import com.example.demo.Entity.PostEntity;
+import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repositories.ImagePostRepository;
 import com.example.demo.Request.PostRequest;
 import com.example.demo.Response.EmptyResponse;
@@ -27,6 +28,7 @@ public class PostApi {
     @Autowired
     ImagePostRepository imagePostRepository;
 
+
     @PostMapping()
     public ResponseEntity<IEmpty> addPosts(@RequestPart(value = "files", required = false) List<MultipartFile> files,
                                            @RequestParam(value = "idUser", required = false) long idUser,
@@ -42,12 +44,10 @@ public class PostApi {
 
     @PostMapping(value = "/like")
     public ResponseEntity<IEmpty> likePosts(@RequestBody Map<String, Long> requestBody) {
-        long idPost = requestBody.get("idPost");
-        long idUser = requestBody.get("idUser");
-        System.out.println(idPost);
-        System.out.println(idUser);
+        long postId = requestBody.get("postId");
+        long userId = requestBody.get("userId");
         try {
-            PostResponse post = postService.likePost(idPost, idUser);
+            UserEntity post = postService.likePost(postId, userId);
             return ResponseEntity.ok(post);
         } catch (Exception e) {
             System.out.println(e);
@@ -57,11 +57,11 @@ public class PostApi {
 
     @PostMapping(value = "/dislike")
     public ResponseEntity<IEmpty> dislikePosts(@RequestBody Map<String, Long> requestBody) {
-        long idPost = requestBody.get("idPost");
-        long idUser = requestBody.get("idUser");
+        long postId = requestBody.get("postId");
+        long userId = requestBody.get("userId");
         try {
-            PostResponse post = postService.dislikePost(idPost, idUser);
-            return ResponseEntity.ok(post);
+            UserEntity user = postService.dislikePost(postId, userId);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("Post failed").build());
