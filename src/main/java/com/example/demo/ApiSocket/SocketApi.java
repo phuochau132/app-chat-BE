@@ -25,7 +25,8 @@ public class SocketApi {
     @SendTo("/topic/rooms/{roomId}")
     @MessageMapping("/chat/{roomId}")
     public ResponseEntity<IEmpty> getting(@Payload SMessageRequest messageRequest) {
-
+        System.out.println(12398);
+        System.out.println(messageRequest);
         try {
             return ResponseEntity.ok(messageRequest);
         } catch (Exception e) {
@@ -59,9 +60,6 @@ public class SocketApi {
             }
         }
         users.add(user);
-        System.out.println(789);
-        System.out.println(users);
-
         return users;
     }
 

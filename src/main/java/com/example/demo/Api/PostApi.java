@@ -79,5 +79,16 @@ public class PostApi {
             return ResponseEntity.status(403).build();
         }
     }
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<Collection<PostResponse>> getPostsByUser(@PathVariable long id) {
+        System.out.println(id);
+        try {
+            Collection<PostResponse> posts = postService.getPostsByUser(id);
+            return ResponseEntity.ok(posts);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(403).build();
+        }
+    }
 
 }

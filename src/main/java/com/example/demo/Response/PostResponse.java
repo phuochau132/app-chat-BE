@@ -6,11 +6,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -22,5 +18,6 @@ public class PostResponse implements IEmpty {
     private String text;
     private int status;
     private Set<UserEntity> likedUsers;
+    private Date createdAt;
 
 }

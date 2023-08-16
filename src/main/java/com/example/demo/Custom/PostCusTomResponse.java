@@ -58,7 +58,7 @@ public class PostCusTomResponse {
             List<PostEntity> posts = query.getResultList();
             List<PostResponse> postsRp = new ArrayList<>();
             for (PostEntity post : posts) {
-                postsRp.add(PostResponse.builder().id(post.getId()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(getUserLiked(post)).build());
+                postsRp.add(PostResponse.builder().id(post.getId()).createdAt(post.getCreateAt()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(getUserLiked(post)).build());
             }
             return new HashSet<>(postsRp);
         }
@@ -73,9 +73,23 @@ public class PostCusTomResponse {
         query.setParameter("userId", user.getId());
         query.setParameter("postId", postId);
         int deletedCount = query.executeUpdate();
-        System.out.println(deletedCount);
         return deletedCount;
     }
+
+    @Transactional
+    public Set<PostResponse> getPostsByUser(long idUser) {
+        String sql = "SELECT p FROM PostEntity p join UserEntity as u on u.id=p.user.id where p.user.id=:id";
+        TypedQuery<PostEntity> query = entityManager.createQuery(sql, PostEntity.class);
+        query.setParameter("id", idUser);
+        List<PostEntity> posts = query.getResultList();
+        List<PostResponse> postsRp = new ArrayList<>();
+        for (PostEntity post : posts) {
+            postsRp.add(PostResponse.builder().id(post.getId()).user(post.getUser()).imgPosts(post.getImgPosts()).comments(post.getComments()).text(post.getText()).likedUsers(getUserLiked(post)).createdAt(post.getCreateAt()).build());
+        }
+        return new HashSet<>(postsRp);
+    }
+
+
 }
 
 

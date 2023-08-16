@@ -20,7 +20,7 @@ public class FriendShipCusTomResponse  {
         return query.getResultList();
     }
     public Collection<FriendshipEntity> getAllFriend(long id) {
-        String jpql = "SELECT f as id FROM FriendshipEntity f WHERE ( f.friend.id = :userId) or  ( f.user.id = :userId) AND f.status = 1";
+        String jpql = "SELECT f as id FROM FriendshipEntity f WHERE ( f.friend.id = :userId) or  ( f.user.id = :userId)";
         TypedQuery<FriendshipEntity> query = entityManager.createQuery(jpql, FriendshipEntity.class);
         query.setParameter("userId", id);
         return query.getResultList();

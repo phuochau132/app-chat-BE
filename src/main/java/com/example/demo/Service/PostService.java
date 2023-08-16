@@ -87,5 +87,9 @@ public class PostService implements IPost {
     public Collection<PostResponse> getPosts(long idPost) {
         return postCusTomResponse.getPosts(idPost);
     }
+    @Override
+    public Collection<PostResponse> getPostsByUser(long idPost) {
+        return postCusTomResponse.getPostsByUser(idPost);
+    }
 
 }

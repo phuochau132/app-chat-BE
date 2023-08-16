@@ -12,5 +12,6 @@ public interface IPost {
     public UserEntity likePost(long idPost, long idUser);
     public UserEntity dislikePost(long idPost, long idUser);
     public Collection<PostResponse> getPosts(long idPost);
+    public Collection<PostResponse> getPostsByUser(long idPost);
 
 }
