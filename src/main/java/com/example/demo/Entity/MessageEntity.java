@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 
@@ -28,6 +30,8 @@ public class MessageEntity implements IEmpty {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     @JsonIgnore
     private RoomEntity room;
+    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<ImageMessageEntity> imgMessage = new ArrayList<>();
     private String text;
     private int type;
     private Date createAt;

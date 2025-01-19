@@ -5,17 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 
-public class PostRequest implements IEmpty {
-    private Long idUser;
-    private List<MultipartFile> listFile;
-    private String text;
+public class StoryRequest implements IEmpty {
+    private String image;
+    private String content;
+    private int userId;
     private int status;
 }

@@ -59,6 +59,12 @@ public class PostService implements IPost {
         post.setImgPosts(images);
         return post;
     }
+    @Override
+    public PostEntity delPostById(Long id) {
+        PostEntity post = postRepository.findById(id).get();
+        postRepository.delete(post);
+        return post;
+    }
 
     @Transactional
     @Override

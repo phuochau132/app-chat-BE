@@ -24,8 +24,8 @@ public class FriendshipEntity implements IEmpty {
     private RoomEntity room;
     //0 chờ
     //1 bạn bè
-    private Date createAt;
     private int status;
+    private Date createAt;
     @PrePersist
     public void prePersist() {
         if (createAt == null) {

@@ -35,7 +35,6 @@ public class FriendShipApi {
     @Transactional
     public ResponseEntity<IEmpty> addFriend(@RequestBody(required = false) FriendRequest friendRequest) {
         try {
-            System.out.println(friendRequest);
             FriendShipResponse f1= friendShipService.saveFriendShip(friendRequest);
             return ResponseEntity.ok(f1);
         } catch (Exception e) {
@@ -59,7 +58,7 @@ public class FriendShipApi {
     }
 
     @PostMapping(value = "/{action}")
-    public ResponseEntity<IEmpty> acceptRequestAddFriend(@PathVariable String action,@RequestBody Map<String, Long> requestBody) {
+    public ResponseEntity<IEmpty> acceptRequestAddFriend(@PathVariable String action,@RequestBody Map<String, Integer> requestBody) {
         FriendshipEntity f1=null;
         try {
             if(action.equals("accept")){

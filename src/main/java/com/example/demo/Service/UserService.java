@@ -3,13 +3,18 @@ package com.example.demo.Service;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.demo.Entity.MessageEntity;
 import com.example.demo.Entity.RoleEntity;
+import com.example.demo.Entity.StoryEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.IService.IUser;
 import com.example.demo.Repositories.MessageRepository;
 import com.example.demo.Repositories.RoleRepository;
+import com.example.demo.Repositories.StoryRepository;
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Request.StoryRequest;
 import com.example.demo.Response.UserResponse;
+import com.example.demo.UploadFile.UploadFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,15 +35,34 @@ public class UserService implements IUser {
     PasswordEncoder passwordEncoder;
     @Autowired
     JwtService jwtService;
-
+    @Autowired
+    StoryRepository storyRepository;
     @Override
     public UserEntity saveUser(UserEntity user) {
-        System.out.println(98123);
-        System.out.println(user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAvatar("https://res.cloudinary.com/dvgjegefi/image/upload/v1736344909/20171206_01_ppq0sw.jpg");
         return userRepository.save(user);
     }
-
+    @Override
+    public void changePassword(String email, String newPassword) {
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            UserEntity user = userOptional.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        } else {
+            throw new UsernameNotFoundException("User with email " + email + " not found");
+        }
+    }
+    @Override
+    public UserEntity findByEmail(String email) {
+        Optional<UserEntity> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            return userOptional.get();
+        } else {
+            throw new UsernameNotFoundException("User with email " + email + " not found");
+        }
+    }
     @Override
     public RoleEntity saveRole(RoleEntity roleEntity) {
         return roleRepository.save(roleEntity);
@@ -61,10 +85,12 @@ public class UserService implements IUser {
     @Override
     public UserResponse changeProfile(UserEntity userEntity) {
         Optional<UserEntity> optionalUser = userRepository.findById(userEntity.getId());
+
         UserEntity user = optionalUser.get();
-        if (user.getAvatar() != null) {
+        if (userEntity.getAvatar() != null) {
             user.setAvatar(userEntity.getAvatar());
         }
+        user.setExpoPushToken(userEntity.getExpoPushToken());
         user.setFullName(userEntity.getFullName());
         user.setNickName(userEntity.getNickName());
         user.setStory(userEntity.getStory());
@@ -85,13 +111,20 @@ public class UserService implements IUser {
 
     @Override
     public Optional<UserEntity> getInfoUser(String token) {
-        System.out.println(1235);
-        System.out.println(token);
         DecodedJWT decodedJWT = jwtService.verifyToken(token);
         String username = decodedJWT.getSubject();
-
-        System.out.println(decodedJWT);
-        System.out.println(username);
         return userRepository.findByName(username);
     }
+
+    @Override
+    public Optional<StoryEntity> addStory(StoryRequest storyRequest) {
+        Optional<UserEntity> user = userRepository.findById(storyRequest.getUserId());
+        if (user.isPresent()) {
+            StoryEntity storyEntity = new StoryEntity(storyRequest.getImage(), storyRequest.getContent(), user.get(), storyRequest.getStatus());
+            StoryEntity savedStory = storyRepository.save(storyEntity);
+            return Optional.of(savedStory);
+        } else {
+            return Optional.empty();
+        }
+}
 }

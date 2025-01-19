@@ -41,6 +41,16 @@ public class PostApi {
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("Post failed").build());
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<IEmpty> delPosts(@PathVariable Long id) {
+        try {
+            postService.delPostById(id);
+            return ResponseEntity.ok(EmptyResponse.builder().message("Post deleted successfully").build());
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(403).body(EmptyResponse.builder().message("Post failed").build());
+        }
+    }
 
     @PostMapping(value = "/like")
     public ResponseEntity<IEmpty> likePosts(@RequestBody Map<String, Long> requestBody) {
@@ -70,7 +80,6 @@ public class PostApi {
 
     @GetMapping(value = "/{idPost}")
     public ResponseEntity<Collection<PostResponse>> getPosts(@PathVariable long idPost) {
-        System.out.println(12391238);
         try {
             Collection<PostResponse> posts = postService.getPosts(idPost);
             return ResponseEntity.ok(posts);

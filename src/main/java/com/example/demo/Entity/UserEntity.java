@@ -21,9 +21,12 @@ public class UserEntity implements UserDetails, IEmpty {
     private String nickName=null;
     private String birthDay=null;
     private String name=null;
+    private String email=null;
     private String fullName=null;
     private String expoPushToken=null;
     private String story=null;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<StoryEntity> stories = new ArrayList<>();
     @Column(columnDefinition = "VARCHAR(255) DEFAULT '/anonymous_avatar.png'")
     private String avatar;
     @JsonIgnore
@@ -43,9 +46,11 @@ public class UserEntity implements UserDetails, IEmpty {
         this.password = password;
         this.roles = roles;
     }
-    public UserEntity(String name, String password) {
+    public UserEntity(String name, String password, String email, String fullName) {
         this.name=name;
         this.password=password;
+        this.fullName=fullName;
+        this.email=email;
     }
 
     @JsonIgnore

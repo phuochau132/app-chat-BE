@@ -5,24 +5,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.aspectj.bridge.Message;
 
 
 @Entity
-@Table(name = "imagepost")
+@Table(name = "imagemessage")
 @NoArgsConstructor
 @Data
-public class ImgPostEntity {
+public class ImageMessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    @JoinColumn(name = "message_id", referencedColumnName = "_id")
     @JsonIgnore
-    private PostEntity post;
+    private MessageEntity message;
     private String urlImg;
 
-    public ImgPostEntity(PostEntity post, String urlImg) {
-        this.post = post;
+    public ImageMessageEntity(MessageEntity message, String urlImg) {
+        this.message = message;
         this.urlImg = urlImg;
     }
 }

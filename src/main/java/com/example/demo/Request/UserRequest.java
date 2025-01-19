@@ -18,5 +18,5 @@ public class UserRequest  implements IEmpty {
     private final String avatar="";
     private final Set<RoleEntity> roles=new HashSet<RoleEntity>();
     private final Set<UserRequest> friends = new HashSet<>();
-
 }
+

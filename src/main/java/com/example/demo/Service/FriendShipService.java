@@ -39,6 +39,7 @@ public class FriendShipService implements IFriendShip {
         friendshipEntity.setUser(sender);
         friendshipEntity.setFriend(receiver);
         friendshipEntity.setRoom(room);
+        friendshipEntity.setStatus(0);
         FriendshipEntity f=friendShipRepository.save(friendshipEntity);
         return FriendShipResponse.builder().id(f.getId()).user(f.getFriend()).createAt(f.getCreateAt()).status(f.getStatus()).room(f.getRoom()).build();
     }

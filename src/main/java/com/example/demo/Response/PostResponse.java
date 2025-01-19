@@ -19,5 +19,4 @@ public class PostResponse implements IEmpty {
     private int status;
     private Set<UserEntity> likedUsers;
     private Date createdAt;
-
 }

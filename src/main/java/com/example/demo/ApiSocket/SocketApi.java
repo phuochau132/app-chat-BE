@@ -20,12 +20,11 @@ import java.util.List;
 
 @Controller
 public class SocketApi {
-    List<StatusUserRequest> users = new ArrayList<>();
+        List<StatusUserRequest> users = new ArrayList<>();
 
     @SendTo("/topic/rooms/{roomId}")
     @MessageMapping("/chat/{roomId}")
     public ResponseEntity<IEmpty> getting(@Payload SMessageRequest messageRequest) {
-        System.out.println(12398);
         System.out.println(messageRequest);
         try {
             return ResponseEntity.ok(messageRequest);
@@ -62,6 +61,9 @@ public class SocketApi {
         users.add(user);
         return users;
     }
-
-
+    @SendTo("/topic/rooms/{roomId}")
+    @MessageMapping("/call/{roomId}")
+    public String signalingMessage(@Payload String message) {
+        return message;
+    }
 }

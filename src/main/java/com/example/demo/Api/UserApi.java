@@ -1,7 +1,9 @@
 package com.example.demo.Api;
 
+import com.example.demo.Entity.StoryEntity;
 import com.example.demo.Entity.UserEntity;
 import com.example.demo.Repositories.RoomRepository;
+import com.example.demo.Request.StoryRequest;
 import com.example.demo.Response.EmptyResponse;
 import com.example.demo.Response.IEmpty;
 import com.example.demo.Response.UserResponse;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -40,14 +43,9 @@ public class UserApi {
     }
 
     @PostMapping(value = "/profile")
-    public ResponseEntity<IEmpty> editProfile(@RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "user", required = false) String user) {
+    public ResponseEntity<IEmpty> editProfile( @RequestParam(value = "user", required = false) String user) {
         try {
             UserEntity user1 = objectMapper.readValue(user, UserEntity.class);
-            System.out.println(user1);
-            if (file != null) {
-                String newAvatar = uploadFile.uploadFile(file, "user");
-                user1.setAvatar(newAvatar);
-            }
             UserResponse userR = userService.changeProfile(user1);
             return ResponseEntity.ok(userR);
         } catch (Exception e) {
@@ -66,6 +64,18 @@ public class UserApi {
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
         }
     }
-
+    @PostMapping(value = "/story")
+    public ResponseEntity<Optional<StoryEntity>> addStory(@RequestBody Map<String,Object> requestBody) {
+        String image = (String) requestBody.get("image");
+        int userId = ((Number) requestBody.get("userId")).intValue();
+        String content = (String) requestBody.get("content");
+        int status = ((Number) requestBody.get("status")).intValue();
+        try {
+            return ResponseEntity.ok(userService.addStory(StoryRequest.builder().status(status).image(image).userId(userId).content(content).build()));
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.status(403).body(null);
+        }
+    }
 
 }

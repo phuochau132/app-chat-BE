@@ -17,6 +17,10 @@ public class JwtService {
         Algorithm algorithm=Algorithm.HMAC256(secret__key.getBytes());
         return JWT.create().withSubject(name).withExpiresAt(new Date(System.currentTimeMillis()+60*60*1000)).withClaim("roles",collection.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);
     }
+    public String generateEmailToken(String name, Collection<SimpleGrantedAuthority> collection){
+        Algorithm algorithm=Algorithm.HMAC256(secret__key.getBytes());
+        return JWT.create().withSubject(name).withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)).withClaim("roles",collection.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);
+    }
     public String generateRefreshToken(String name, Collection<SimpleGrantedAuthority> collection){
         Algorithm algorithm=Algorithm.HMAC256(secret__key.getBytes());
         return JWT.create().withSubject(name).withExpiresAt(new Date(System.currentTimeMillis() + (long) Integer.MAX_VALUE * 1000)).withClaim("roles",collection.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())).sign(algorithm);

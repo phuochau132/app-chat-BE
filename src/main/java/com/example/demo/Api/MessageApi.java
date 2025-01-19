@@ -23,17 +23,12 @@ public class MessageApi {
 
     @PostMapping()
     public ResponseEntity<IEmpty> addMessageToRoom(@RequestBody MessageRequest messageRequest) {
-        System.out.println(messageRequest);
         try {
-            MessageEntity room= roomService.addMessage(messageRequest);
+            MessageEntity room = roomService.addMessage(messageRequest);
             return ResponseEntity.ok(room);
         } catch (Exception e) {
             System.out.println(e);
             return ResponseEntity.status(403).body(EmptyResponse.builder().message("error").build());
         }
     }
-
-
-
-
 }
